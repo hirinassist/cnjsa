@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>機會跳板 · 行動支付返利平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #f5c842;
+  --gold-light: #ffe680;
+  --gold-dark: #c8980a;
+  --bg-dark: #1a0a00;
+  --bg-mid: #2e1200;
+  --bg-card: #3a1800;
+  --red-accent: #c0392b;
+  --text-white: #fff8ee;
+  --text-muted: #d4a96a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-white);
+  font-family: 'Noto Sans TC', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── BG texture ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245,200,66,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(192,57,43,0.10) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 48px 20px 20px;
+  background: linear-gradient(180deg, rgba(245,200,66,0.08) 0%, transparent 100%);
+}
+
+.star-row {
+  color: var(--gold);
+  font-size: 1.4rem;
+  letter-spacing: 6px;
+  margin-bottom: 6px;
+  animation: pulse-gold 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-gold {
+  0%,100% { opacity: 1; }
+  50% { opacity: .55; }
+}
+
+header h1 {
+  font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+  font-size: clamp(2.6rem, 9vw, 4.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffe680 0%, #f5c842 40%, #c8980a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  letter-spacing: 2px;
+}
+
+header .sub {
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
+  color: var(--text-white);
+  margin-top: 6px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+/* ─── CTA BUTTON ─── */
+.cta-btn {
+  display: inline-block;
+  margin: 24px auto 0;
+  padding: 18px 44px;
+  background: linear-gradient(135deg, #f5c842 0%, #c8980a 100%);
+  color: #1a0a00;
+  font-size: 1.2rem;
+  font-weight: 900;
+  border-radius: 50px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 30px rgba(245,200,66,0.5), 0 0 0 3px rgba(245,200,66,0.2);
+  transition: transform .18s, box-shadow .18s;
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-20deg);
+  animation: sheen 2.8s ease-in-out infinite;
+}
+@keyframes sheen {
+  0% { left: -75%; }
+  60%,100% { left: 130%; }
+}
+.cta-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 40px rgba(245,200,66,0.7); }
+
+/* ─── AD IMAGE ─── */
+.ad-wrap {
+  position: relative; z-index: 2;
+  max-width: 680px;
+  margin: 36px auto 0;
+  padding: 0 16px;
+}
+.ad-wrap img {
+  width: 100%;
+  border-radius: 16px;
+  border: 2px solid rgba(245,200,66,0.4);
+  box-shadow: 0 8px 48px rgba(245,200,66,0.18), 0 2px 12px rgba(0,0,0,0.6);
+  display: block;
+}
+
+/* ─── SECTIONS ─── */
+section {
+  position: relative; z-index: 2;
+  max-width: 720px;
+  margin: 40px auto 0;
+  padding: 0 16px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: clamp(1.3rem, 5vw, 1.9rem);
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+/* ─── HOW IT WORKS ─── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 480px) {
+  .steps { grid-template-columns: 1fr; }
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(245,200,66,0.25);
+  border-radius: 14px;
+  padding: 20px 14px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.step-card:hover { border-color: var(--gold); }
+
+.step-num {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5c842, #c8980a);
+  color: #1a0a00;
+  font-weight: 900;
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.step-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+}
+.step-card p {
+  font-size: .85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ─── BANKS ─── */
+.bank-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 400px) {
+  .bank-grid { grid-template-columns: 1fr; }
+}
+
+.bank-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: .9rem;
+  color: var(--text-white);
+  display: flex; align-items: center; gap: 10px;
+}
+.bank-code {
+  background: linear-gradient(135deg, #f5c842, #c8980a);
+  color: #1a0a00;
+  font-weight: 900;
+  font-size: .8rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ─── CASHBACK HIGHLIGHT ─── */
+.cashback-box {
+  background: linear-gradient(135deg, rgba(245,200,66,0.12) 0%, rgba(200,152,10,0.08) 100%);
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  padding: 28px 24px;
+  text-align: center;
+  margin: 0 auto;
+}
+.cashback-box .big-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffe680, #f5c842, #c8980a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cashback-box p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.7;
+}
+.badge {
+  display: inline-block;
+  background: var(--red-accent);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+
+/* ─── SAFETY ─── */
+.safety-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 480px) {
+  .safety-grid { grid-template-columns: 1fr; }
+}
+
+.safety-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 14px;
+  padding: 20px 16px;
+}
+.safety-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.safety-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.safety-card p {
+  font-size: .85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ─── TESTIMONIALS ─── */
+.reviews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.review-card {
+  background: var(--bg-card);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 20px;
+}
+.review-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+}
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5c842, #c8980a);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  color: #1a0a00;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.reviewer-name {
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text-white);
+}
+.stars { color: var(--gold); font-size: .85rem; }
+.review-text {
+  font-size: .88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.review-amount {
+  display: inline-block;
+  margin-top: 8px;
+  background: rgba(245,200,66,0.15);
+  color: var(--gold);
+  font-weight: 700;
+  font-size: .82rem;
+  padding: 3px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(245,200,66,0.3);
+}
+
+/* ─── NOTICE BAR ─── */
+.notice {
+  max-width: 720px;
+  margin: 36px auto 0;
+  padding: 0 16px;
+  position: relative; z-index: 2;
+}
+.notice-bar {
+  background: rgba(192,57,43,0.15);
+  border: 1px solid rgba(192,57,43,0.5);
+  border-radius: 12px;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: .9rem;
+  color: #f08080;
+  line-height: 1.6;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 44px 20px 52px;
+  margin-top: 40px;
+  background: linear-gradient(0deg, rgba(245,200,66,0.07) 0%, transparent 100%);
+}
+footer p {
+  color: var(--text-muted);
+  font-size: .82rem;
+  margin-top: 16px;
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  max-width: 720px;
+  margin: 40px auto 0;
+  padding: 0 16px;
+  position: relative; z-index: 2;
+}
+.divider hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.35), transparent);
+}
+
+/* fade-in animation */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp .6s ease forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: none; }
+}
+.delay-1 { animation-delay: .15s; }
+.delay-2 { animation-delay: .3s; }
+.delay-3 { animation-delay: .45s; }
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header>
+  <div class="star-row">★ ★ ★ ★ ★</div>
+  <h1 class="fade-up">機會跳板</h1>
+  <div class="sub fade-up delay-1">尋找 行動支付</div>
+  <a href="https://lin.ee/v33AqJpV" class="cta-btn fade-up delay-2" target="_blank" rel="noopener">
+    ➜ 立即加入 LINE 諮詢
+  </a>
+</header>
+
+<!-- ════ AD IMAGE ════ -->
+<div class="ad-wrap fade-up delay-3">
+  <img src="ad_image.png" alt="機會跳板行動支付返利廣告">
+</div>
+
+<!-- ════ HOW IT WORKS ════ -->
+<div class="divider"><hr></div>
+<section>
+  <div class="section-title">三步驟輕鬆賺回饋</div>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>選擇帳戶</h3>
+      <p>從支援的數位帳戶中選擇您已有的銀行帳戶</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>完成支付</h3>
+      <p>透過指定管道進行行動支付，金額全程透明</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>即時結算</h3>
+      <p>依金額比例即時返還點數，快速到帳不等待</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ SUPPORTED BANKS ════ -->
+<div class="divider"><hr></div>
+<section>
+  <div class="section-title">支援銀行（數位帳戶）</div>
+  <div class="bank-grid">
+    <div class="bank-item"><span class="bank-code">004</span>台灣銀行 數位帳戶</div>
+    <div class="bank-item"><span class="bank-code">017</span>兆豐 MegaLite</div>
+    <div class="bank-item"><span class="bank-code">007</span>第一銀行 iLeo</div>
+    <div class="bank-item"><span class="bank-code">812</span>台新 Richart</div>
+    <div class="bank-item"><span class="bank-code">008</span>華南銀行 SnY</div>
+    <div class="bank-item"><span class="bank-code">822</span>中國信託 My Way</div>
+  </div>
+</section>
+
+<!-- ════ CASHBACK ════ -->
+<div class="divider"><hr></div>
+<section>
+  <div class="section-title">回饋機制</div>
+  <div class="cashback-box">
+    <div class="big-text">依金額分數返 %</div>
+    <p>金額越高，回饋比例越優<br>每筆交易即時結算，秒速入帳</p>
+    <span class="badge">⚡ 即時結算</span>
+  </div>
+</section>
+
+<!-- ════ SAFETY ════ -->
+<div class="divider"><hr></div>
+<section>
+  <div class="section-title">安全保障</div>
+  <div class="safety-grid">
+    <div class="safety-card">
+      <div class="icon">🛡️</div>
+      <h3>風險保障</h3>
+      <p>無任何危險性風險，不涉及任何刑事民事責任</p>
+    </div>
+    <div class="safety-card">
+      <div class="icon">🏦</div>
+      <h3>實體銀行無影響</h3>
+      <p>實體銀行帳戶完全不受影響，虛擬錢包若遭鎖可提供證明解鎖</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ TESTIMONIALS ════ -->
+<div class="divider"><hr></div>
+<section>
+  <div class="section-title">用戶真實回饋</div>
+  <div class="reviews">
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">小林</div>
+        <div>
+          <div class="reviewer-name">林小姐・台北</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <p class="review-text">用 Richart 帳戶操作，第一次就順利結算，客服回應也很快。完全不影響我日常的銀行使用，推薦給有數位帳戶的朋友！</p>
+      <span class="review-amount">💰 本月回饋 NT$2,400</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">阿志</div>
+        <div>
+          <div class="reviewer-name">陳先生・台中</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <p class="review-text">剛開始有點半信半疑，加了 LINE 問了很多問題，對方都耐心解釋。操作真的很簡單，當天就看到入帳了。</p>
+      <span class="review-amount">💰 本月回饋 NT$3,100</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">小雯</div>
+        <div>
+          <div class="reviewer-name">王小姐・高雄</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <p class="review-text">用 iLeo 數位帳戶，操作十分鐘搞定，即時結算不是騙人的。已連續兩個月穩定操作，是我目前最省事的被動收入。</p>
+      <span class="review-amount">💰 本月回饋 NT$1,850</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">大明</div>
+        <div>
+          <div class="reviewer-name">張先生・新竹</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <p class="review-text">之前帳號有警示，諮詢後說可以協助恢復，真的幫我解除了。之後繼續操作，完全沒問題，超感謝！</p>
+      <span class="review-amount">💰 本月回饋 NT$2,200</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ NOTICE ════ -->
+<div class="notice">
+  <div class="notice-bar">
+    ⚠️ 目前有警示戶者 / 曾經有警示戶者亦可諮詢<br>
+    有解除恢復正常者歡迎加入
+  </div>
+</div>
+
+<!-- ════ FOOTER CTA ════ -->
+<footer>
+  <div class="star-row">★ ★ ★ ★ ★</div>
+  <p style="font-size:1.05rem;color:var(--text-white);margin:10px 0 4px;font-weight:700;">準備好開始了嗎？</p>
+  <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:20px;">加入 LINE 立即諮詢，全程免費說明</p>
+  <a href="https://lin.ee/v33AqJpV" class="cta-btn" target="_blank" rel="noopener">
+    ➜ 立即加入 LINE 諮詢
+  </a>
+  <p>© 2026 機會跳板 · 行動支付返利平台</p>
+</footer>
+
+<script>
+// Replace placeholder with real image
+(function(){
+  var img = document.querySelector('.ad-wrap img');
+  if(img) img.src = '';
+})();
+</script>
+</body>
+</html>
